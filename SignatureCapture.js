@@ -101,7 +101,9 @@ SignatureCapture.propTypes = {
     minStrokeWidth: PropTypes.number,
     maxStrokeWidth: PropTypes.number,
     strokeColor: PropTypes.string,
-    backgroundColor: PropTypes.string
+    backgroundColor: PropTypes.string,
+    compressionQuality: PropTypes.number,
+    outputFormat:PropTypes.oneOf(['png', 'jpg'])
 };
 
 var RSSignatureView = requireNativeComponent('RSSignatureView', SignatureCapture, {

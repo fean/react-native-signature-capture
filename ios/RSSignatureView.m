@@ -19,6 +19,8 @@
 	BOOL _showBorder;
 	BOOL _showNativeButtons;
 	BOOL _showTitleLabel;
+	double _compressionQuality;
+	NSString *_outputFormat;
 }
 
 @synthesize sign;
@@ -26,9 +28,11 @@
 
 - (instancetype)init
 {
-  _showBorder = YES;
+  	_showBorder = YES;
 	_showNativeButtons = YES;
 	_showTitleLabel = YES;
+	_compressionQuality = 1.0;
+	_outputFormat = @"png";
 	if ((self = [super init])) {
 		_border = [CAShapeLayer layer];
 		_border.strokeColor = [UIColor blackColor].CGColor;
@@ -183,6 +187,14 @@
 	[self saveImage];
 }
 
+- (void)setCompressionQuality:(double)compressionQuality {
+	_compressionQuality = compressionQuality;
+}
+
+- (void)setOutputFormat:(NSString *)outputFormat {
+	_outputFormat = outputFormat;
+}
+
 -(void) saveImage {
 	saveButton.hidden = YES;
 	clearButton.hidden = YES;
@@ -192,10 +204,15 @@
 	clearButton.hidden = NO;
 
 	NSError *error;
+	NSString *outputFileName = @"/signature.png";
+
+	if([_outputFormat isEqual:@"jpg"]) {
+		outputFileName = @"/signature.jpg";
+	}
 
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths firstObject];
-	NSString *tempPath = [documentsDirectory stringByAppendingFormat:@"/signature.png"];
+	NSString *tempPath = [documentsDirectory stringByAppendingFormat:@"%@", outputFileName];
 
 	//remove if file already exists
 	if ([[NSFileManager defaultManager] fileExistsAtPath:tempPath]) {
@@ -206,7 +223,13 @@
 	}
 
 	// Convert UIImage object into NSData (a wrapper for a stream of bytes) formatted according to PNG spec
-	NSData *imageData = UIImagePNGRepresentation(signImage);
+	NSData *imageData = NULL;
+	if([_outputFormat isEqual:@"jpg"]) {
+        imageData = UIImageJPEGRepresentation(signImage, _compressionQuality);
+	} else {
+		imageData = UIImagePNGRepresentation(signImage);
+	}
+
 	BOOL isSuccess = [imageData writeToFile:tempPath atomically:YES];
 	if (isSuccess) {
 		NSFileManager *man = [NSFileManager defaultManager];
