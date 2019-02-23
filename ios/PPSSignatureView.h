@@ -15,5 +15,5 @@
 - (UIImage *) signatureImage;
 - (UIImage *) signatureImage: (BOOL) rotatedImage;
 - (UIImage *) signatureImage: (BOOL) rotatedImage withSquare:(BOOL)square;
-
+- (UIImage *) signatureImage: (BOOL) rotatedImage withSquare:(BOOL)square withMaxSize:(CGFloat) maxSize;
 @end

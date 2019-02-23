@@ -21,6 +21,7 @@
 	BOOL _showTitleLabel;
 	double _compressionQuality;
 	NSString *_outputFormat;
+    CGFloat _maxSize;
 }
 
 @synthesize sign;
@@ -33,6 +34,7 @@
 	_showTitleLabel = YES;
 	_compressionQuality = 1.0;
 	_outputFormat = @"png";
+    _maxSize = 0;
 	if ((self = [super init])) {
 		_border = [CAShapeLayer layer];
 		_border.strokeColor = [UIColor blackColor].CGColor;
@@ -195,10 +197,14 @@
 	_outputFormat = outputFormat;
 }
 
+- (void)setMaxSize:(CGFloat)maxSize {
+    _maxSize = maxSize;
+}
+
 -(void) saveImage {
 	saveButton.hidden = YES;
 	clearButton.hidden = YES;
-	UIImage *signImage = [self.sign signatureImage: _rotateClockwise withSquare:_square];
+	UIImage *signImage = [self.sign signatureImage: _rotateClockwise withSquare:_square withMaxSize:_maxSize];
 
 	saveButton.hidden = NO;
 	clearButton.hidden = NO;

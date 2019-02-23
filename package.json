@@ -17,6 +17,7 @@
     "signature"
   ],
   "peerDependencies": {
+    "react": ">=15.4.1",
     "react-native": ">=0.47"
   },
   "author": "RepairShopr",
@@ -27,5 +28,12 @@
   "homepage": "https://github.com/RepairShopr/react-native-signature-capture#readme",
   "dependencies": {
     "prop-types": "^15.5.10"
+  },
+  "devDependencies": {
+    "@babel/runtime": "^7.3.1",
+    "react": "^16.8.3",
+    "react-dom": "^16.8.3",
+    "react-hot-loader": "^4.7.1",
+    "react-native": "^0.58.5"
   }
 }

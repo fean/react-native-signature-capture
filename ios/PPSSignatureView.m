@@ -286,6 +286,35 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 {
 	return [self signatureImage:rotatedImage withSquare:false];
 }
+- (UIImage *)signatureImage: (BOOL) rotatedImage withSquare:(BOOL) square withMaxSize:(CGFloat) maxSize
+{
+    if(!self.hasSignature)
+        return nil;
+    
+    UIImage *signatureImg;
+    UIImage *snapshot = [self snapshot];
+    [self erase];
+    
+    BOOL shouldRotate = rotatedImage && UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad;
+    
+    if(maxSize == 0 && square) {
+        maxSize = 400.0f;
+    }
+    
+    //rotate iphone signature - iphone's signature screen is always landscape
+    if(shouldRotate) {
+        signatureImg = [self rotateImage:snapshot clockwise:false];
+    } else {
+        signatureImg = snapshot;
+    }
+    
+    if(maxSize > 0) {
+        signatureImg = [self reduceImage:signatureImg toSize:CGSizeMake(maxSize, maxSize)];
+    }
+    
+    return signatureImg;
+}
+
 - (UIImage *)signatureImage: (BOOL) rotatedImage withSquare:(BOOL) square
 {
 	if (!self.hasSignature)
