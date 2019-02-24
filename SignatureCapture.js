@@ -11,6 +11,18 @@ var {
     DeviceEventEmitter
 } = ReactNative;
 
+/**
+ * Return the native view manager config.
+ * Use the new UIManager.getViewManagerConfig if it is available.
+ * Otherwise fallback to the previous method.
+ * @param {String} viewName the native view name
+ */
+const getViewManagerConfig = (viewName) => {
+    if(typeof UIManager.getViewManagerConfig === "function") {
+        return UIManager.getViewManagerConfig(viewName);
+    }
+    return UIManager[viewName];
+}
 class SignatureCapture extends React.Component {
 
     constructor() {
@@ -73,7 +85,7 @@ class SignatureCapture extends React.Component {
     saveImage() {
         UIManager.dispatchViewManagerCommand(
             ReactNative.findNodeHandle(this),
-            UIManager.getViewManagerConfig('RSSignatureView').Commands.saveImage,
+            getViewManagerConfig('RSSignatureView').Commands.saveImage,
             [],
         );
     }
@@ -81,7 +93,7 @@ class SignatureCapture extends React.Component {
     resetImage() {
         UIManager.dispatchViewManagerCommand(
             ReactNative.findNodeHandle(this),
-            UIManager.getViewManagerConfig('RSSignatureView').Commands.resetImage,
+            getViewManagerConfig('RSSignatureView').Commands.resetImage,
             [],
         );
     }

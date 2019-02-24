@@ -1,9 +1,24 @@
+> This project is a fork from the original library from [RepairShopr](https://github.com/RepairShopr/react-native-signature-capture)
+
 # react-native-signature-capture
 
 ## About this
 React Native library for capturing signature
 
 User would sign on the app and when you press the save button it returns the base64 encoded png
+
+
+## Changelog (diff from original project)
+* Added option **`outputFormat`** to change the output format to either JPG or PNG **(iOS only)**. *Default on iOS: PNG*
+* Added option **`compressionQuality`** to change the output quality of the signature **(JPG on iOS only)**. *Default: 1.0*
+    ```javascript
+    <SignatureCapture 
+                    outputFormat="jpg|png"
+                    compressionQuality={0.5}
+                />
+    ```
+* Changed the size of the output image when **`maxSize`** is set for iOS.
+* Use function **`UIManager.getViewManagerConfig`** to return the native view. Fix for react-native v0.58+. *(For compartibility prior RN 0.58, the previous function will be used on old versions)*
 
 ### iOS
 <img src="http://i.giphy.com/3oEduIyWb48Ws3bSuc.gif" />
