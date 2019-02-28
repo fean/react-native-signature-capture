@@ -31,13 +31,13 @@ User would sign on the app and when you press the save button it returns the bas
 First you need to install react-native-signature-capture:
 
 ```sh
-npm install react-native-signature-capture --save
+npm install @alanlima/react-native-signature-capture --save
 ```
 
 Second you need to link react-native-signature-capture:
 
 ```sh
-react-native link react-native-signature-capture
+react-native link @alanlima/react-native-signature-capture
 ```
 
 Use above `react-native link` command to automatically complete the installation, or link manually like so:
@@ -45,7 +45,7 @@ Use above `react-native link` command to automatically complete the installation
 ### iOS
 
 1. In the XCode's "Project navigator", right click on your project's Libraries folder ➜ Add Files to <...>
-2. Go to node_modules ➜ react-native-signature-capture ➜ ios ➜ select RSSignatureCapture.xcodeproj
+2. Go to node_modules ➜ @alanlima ➜ react-native-signature-capture ➜ ios ➜ select RSSignatureCapture.xcodeproj
 3. Add libRSSignatureCapture.a to Build Phases -> Link Binary With Libraries
 4. Compile and have fun
 
@@ -56,8 +56,8 @@ Add these lines in your file: android/settings.gradle
 ```
 ...
 
-include ':reactnativesignaturecapture',':app'
-project(':reactnativesignaturecapture').projectDir = new File(settingsDir, '../node_modules/react-native-signature-capture/android')
+include ':@alanlima_react-native-signature-capture'
+project(':@alanlima_react-native-signature-capture').projectDir = new File(settingsDir, '../node_modules/@alanlima/react-native-signature-capture/android')
 ```
 
 Add line in your file: android/app/build.gradle
@@ -67,7 +67,7 @@ Add line in your file: android/app/build.gradle
 
 dependencies {
     ...
-    compile project(':reactnativesignaturecapture') // <-- add this line
+    implementation project(':@alanlima_react-native-signature-capture') // <-- add this line
 }
 ```
 
@@ -101,7 +101,7 @@ Then you can use SignatureCapture component in your react-native's App, like thi
 ```javascript
 ...
 import React, {Component} from 'react';
-import SignatureCapture from 'react-native-signature-capture';
+import SignatureCapture from '@alanlima/react-native-signature-capture';
 
 class CustomComponent extends Component {
 
@@ -162,7 +162,7 @@ var {
     View, TouchableHighlight
 } = ReactNative;
 
-import SignatureCapture from 'react-native-signature-capture';
+import SignatureCapture from '@alanlima/react-native-signature-capture';
 
 class RNSignatureExample extends Component {
     render() {
