@@ -27,13 +27,14 @@
   },
   "homepage": "https://github.com/alanlima/react-native-signature-capture#readme",
   "dependencies": {
-    "prop-types": "^15.5.10"
+    "prop-types": "^15.5.10",
+    "react-native-create-library": "^3.1.2"
   },
   "devDependencies": {
     "@babel/runtime": "^7.3.1",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
     "react-hot-loader": "^4.7.1",
-    "react-native": "^0.58.5"
+    "react-native": "^0.59.10"
   }
 }

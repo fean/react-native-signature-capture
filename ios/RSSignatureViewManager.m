@@ -4,6 +4,9 @@
 #import <React/RCTEventDispatcher.h>
 
 @implementation RSSignatureViewManager
+{
+    bool hasListeners;
+}
 
 @synthesize bridge = _bridge;
 @synthesize signView;
@@ -31,6 +34,10 @@ RCT_EXPORT_VIEW_PROPERTY(maxSize, CGFloat)
 	return signView;
 }
 
+- (NSArray<NSString *> *)supportedEvents {
+    return @[@"onDragStart", @"onDragEnd", "onSave"];
+}
+
 // Both of these methods needs to be called from the main thread so the
 // UI can clear out the signature.
 RCT_EXPORT_METHOD(saveImage:(nonnull NSNumber *)reactTag) {
@@ -45,19 +52,38 @@ RCT_EXPORT_METHOD(resetImage:(nonnull NSNumber *)reactTag) {
 	});
 }
 
--(void) publishSaveImageEvent:(NSString *) aTempPath withEncoded: (NSString *) aEncoded {
-	[self.bridge.eventDispatcher
-	 sendDeviceEventWithName:@"onSaveEvent"
-	 body:@{
-					@"pathName": aTempPath,
-					@"encoded": aEncoded
-					}];
+-(void)startObserving {
+    hasListeners = YES;
 }
 
--(void) publishDraggedEvent {
-	[self.bridge.eventDispatcher
-	 sendDeviceEventWithName:@"onDragEvent"
-	 body:@{@"dragged": @YES}];
+-(void)stopObserving {
+    hasListeners = NO;
+}
+
+-void sendEvent
+
+-(void) publishSaveImageEvent:(NSString *) aTempPath withEncoded: (NSString *) aEncoded {
+    if (!hasListeners) {
+        return;
+    }
+
+    [self sendEventWithName: @"onSave" body: @{ @"pathName": aTempPath, @"encoded": aEncoded }];
+}
+
+-(void) publishDragStartEvent {
+    if (!hasListeners) {
+        return;
+    }
+
+    [self sendEventWithName: @"onDragStart"];
+}
+
+-(void) publishDragEndEvent {
+    if (!hasListeners) {
+        return;
+    }
+
+    [self sendEventWithName: @"onDragEnd"];
 }
 
 @end

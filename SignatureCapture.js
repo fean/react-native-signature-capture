@@ -1,15 +1,25 @@
 
 'use strict';
 
-var ReactNative = require('react-native');
-var React = require('react');
-var PropTypes = require('prop-types');
-var {
+const ReactNative = require('react-native');
+const React = require('react');
+const PropTypes = require('prop-types');
+const {
     requireNativeComponent,
     View,
     UIManager,
-    DeviceEventEmitter
+    DeviceEventEmitter,
+    NativeEventEmitter,
+    NativeModules,
+    Platform,
 } = ReactNative;
+
+const { RSSignatureView: NativeSignatureModule } = NativeModules;
+
+const eventEmitter = Platform.OS === 'ios'
+    ? new NativeEventEmitter(NativeSignatureModule)
+    : DeviceEventEmitter;
+const RSSignatureView = requireNativeComponent('RSSignatureView', SignatureCapture);
 
 /**
  * Return the native view manager config.
@@ -23,51 +33,26 @@ const getViewManagerConfig = (viewName) => {
     }
     return UIManager[viewName];
 }
+
 class SignatureCapture extends React.Component {
-
-    constructor() {
-        super();
-        this.onChange = this.onChange.bind(this);
-        this.subscriptions = [];
-    }
-
-    onChange(event) {
-        if(event.nativeEvent.pathName){
-
-            if (!this.props.onSaveEvent) {
-                return;
-            }
-            this.props.onSaveEvent({
-                pathName: event.nativeEvent.pathName,
-                encoded: event.nativeEvent.encoded,
-            });
-        }
-
-        if(event.nativeEvent.dragged){
-            if (!this.props.onDragEvent) {
-                return;
-            }
-            this.props.onDragEvent({
-                dragged: event.nativeEvent.dragged
-            });
-        }
-    }
+    subscriptions = [];
 
     componentDidMount() {
         if (this.props.onSaveEvent) {
-            let sub = DeviceEventEmitter.addListener(
-                'onSaveEvent',
-                this.props.onSaveEvent
-            );
-            this.subscriptions.push(sub);
+            this.addListener('onSave', this.props.onSaveEvent)
         }
 
+        if (this.props.onStartDrag) {
+            this.addListener('onDragStart', this.props.onDragStart)
+        }
+
+        if (this.props.onEndDrag) {
+            this.addListener('onDragEnd', this.props.onDragEnd)
+        }
+
+        // Support for legacy API
         if (this.props.onDragEvent) {
-            let sub = DeviceEventEmitter.addListener(
-                'onDragEvent',
-                this.props.onDragEvent
-            );
-            this.subscriptions.push(sub);
+            this.addListener('onDragEnd', this.props.onDragEvent)
         }
     }
 
@@ -76,10 +61,9 @@ class SignatureCapture extends React.Component {
         this.subscriptions = [];
     }
 
-    render() {
-        return (
-            <RSSignatureView {...this.props} onChange={this.onChange} />
-        );
+    addListener = (eventName, handler) => {
+        const sub = eventEmitter.addListener(eventName, handler);
+        this.subscriptions.push(sub);
     }
 
     saveImage() {
@@ -97,10 +81,16 @@ class SignatureCapture extends React.Component {
             [],
         );
     }
+
+    render() {
+        return (
+            <RSSignatureView {...this.props} />
+        );
+    }
 }
 
 SignatureCapture.propTypes = {
-  ...View.propTypes,
+    ...View.propTypes,
     rotateClockwise: PropTypes.bool,
     square: PropTypes.bool,
     saveImageFileInExtStorage: PropTypes.bool,
@@ -114,11 +104,10 @@ SignatureCapture.propTypes = {
     strokeColor: PropTypes.string,
     backgroundColor: PropTypes.string,
     compressionQuality: PropTypes.number,
-    outputFormat:PropTypes.oneOf(['png', 'jpg'])
+    outputFormat:PropTypes.oneOf(['png', 'jpg']),
+    onDragStart: PropTypes.func,
+    onDragEnd: PropTypes.func,
+    onSaveEvent: PropTypes.func,
 };
-
-var RSSignatureView = requireNativeComponent('RSSignatureView', SignatureCapture, {
-    nativeOnly: { onChange: true }
-});
 
 module.exports = SignatureCapture;

@@ -443,7 +443,7 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 		addVertex(&length, previousVertex);
 		
 		self.hasSignature = YES;
-		[self.manager publishDraggedEvent];
+		[self.manager publishDragStartEvent];
 		
 	} else if ([p state] == UIGestureRecognizerStateChanged) {
 		
@@ -489,6 +489,7 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 		
 		previousVertex = v;
 		addVertex(&length, previousVertex);
+		[self.manager publishDragEndEvent];
 	}
 	
 	[self setNeedsDisplay];

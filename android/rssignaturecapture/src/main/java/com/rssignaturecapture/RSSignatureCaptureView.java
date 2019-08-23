@@ -256,7 +256,6 @@ public class RSSignatureCaptureView extends View {
 				mPoints.clear();
 				mPath.moveTo(eventX, eventY);
 				addPoint(new TimedPoint(eventX, eventY));
-				sendDragSt();
 				sendDragStartEventToReact();
 
 			case MotionEvent.ACTION_MOVE:
@@ -294,7 +293,7 @@ public class RSSignatureCaptureView extends View {
 		return true;
 	}
 
-	public sendDragStartEventToReact() {
+	public void sendDragStartEventToReact() {
 		if (callback != null && !dragged) {
 			callback.onDragStart();
 		}

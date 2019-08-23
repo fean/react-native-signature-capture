@@ -3,13 +3,10 @@ package com.rssignaturecapture;
 import android.util.Log;
 import android.view.ViewGroup;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
-import com.facebook.react.uimanager.ThemedReactContext;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.uimanager.events.RCTEventEmitter;
-import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -185,7 +182,7 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
 
       ReactContext reactContext = (ReactContext) getContext();
       reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-              .receiveEvent(getId(), "onSaveSignature", event);
+              .emit("onSaveSignature", event);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -216,21 +213,14 @@ public class RSSignatureCaptureMainView extends LinearLayout implements OnClickL
   }
 
   @Override public void onDragStart() {
-    WritableMap event = Arguments.createMap();
-    event.putBoolean("dragStart", true);
-
     ReactContext reactContext = (ReactContext) getContext();
     reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-            .receiveEvent(getId(), "onDragStart", event);
+            .emit("onDragStart", Arguments.createMap());
   }
 
   @Override public void onDragEnd() {
-    WritableMap event = Arguments.createMap();
-    event.putBoolean("dragEnd", true);
-
     ReactContext reactContext = (ReactContext) getContext();
     reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-            .receiveEvent(getId(), "onDragEnd", event);
-
+            .emit("onDragEnd", Arguments.createMap());
   }
 }
