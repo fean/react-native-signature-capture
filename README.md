@@ -11,11 +11,11 @@ User would sign on the app and when you press the save button it returns the bas
 ## Changelog (diff from original project)
 * Added option **`outputFormat`** to change the output format to either JPG or PNG **(iOS only)**. *Default on iOS: PNG*
 * Added option **`compressionQuality`** to change the output quality of the signature **(JPG on iOS only)**. *Default: 1.0*
-    ```javascript
+    ```jsx
     <SignatureCapture 
-                    outputFormat="jpg|png"
-                    compressionQuality={0.5}
-                />
+      outputFormat="jpg|png"
+      compressionQuality={0.5}
+    />
     ```
 * Changed the size of the output image when **`maxSize`** is set for iOS.
 * Use function **`UIManager.getViewManagerConfig`** to return the native view. Fix for react-native v0.58+. *(For compartibility prior RN 0.58, the previous function will be used on old versions)*
@@ -139,7 +139,9 @@ class CustomComponent extends Component {
 ### Callback Props
 + **onSaveEvent** : Triggered when saveImage() is called, which return Base64 Encoded String and image file path.
 
-+ **onDragEvent** : Triggered when user marks his signature on the canvas. This will not be called when the user does not perform any action on canvas.
++ **onDragStart** : Triggered when user starts marking the signature on the canvas. This will not be called when the user does not perform any action on canvas.
+
++ **onDragEnd** : Triggered when user stops marking the signature on the canvas. This will not be called when the user does not perform any action on canvas.
 
 
 ### Example
